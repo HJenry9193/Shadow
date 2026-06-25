@@ -2,8 +2,8 @@ name: PyInstaller
 
 on:
   push:
-    tags:
-      - 'v*'  # v0.1.0 같은 거
+    branches:
+      - main  # main 브랜치에 푸시될 때마다 자동 빌드
 
 jobs:
   build-windows:
@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10.6' # 본인의 파이썬 버전 명시
+          python-version: '3.10.6'
 
       - name: Install dependencies
         run: |
@@ -30,5 +30,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-executable
+          name: SHADOW-windows-executable
           path: dist/SHADOW.exe
